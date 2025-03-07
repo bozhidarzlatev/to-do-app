@@ -21,3 +21,29 @@ form > div {
   display: flex;
   flex-direction: column;
 }
+
+.tasks  {
+  display:  flex;
+  flex-direction: column;
+  gap: 1em;
+  
+  &  article {
+    border: 1px solid black;
+    border-radius: 25px;
+    padding: 0em 1em;
+    background: rgb(236, 185, 74);
+    color: white;
+  }
+}
+
+
+@media (hover: none) {
+  .tasks > article,
+  .add-task > form {
+    flex-direction: column;
+  }
+
+  .task-headers{
+    display: none;
+  }
+}

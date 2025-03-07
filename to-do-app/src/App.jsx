@@ -53,7 +53,7 @@ function App() {
                 <button onClick={onClearAllTasks}>Clear All Tasks</button>
                 </div>
                 {addTask ? 
-                <section>
+                <section class="add-task">
                     <form action={onAddTask}>
                         <div>
                             <label htmlFor="task">Task</label>
@@ -82,9 +82,9 @@ function App() {
                     </form>
                 </section>
                 : ""}
-                <section>
+                <section class="tasks">
 
-                    <article>
+                    <article class="task-headers">
 
                         <div>
                             <p>Task:</p>
