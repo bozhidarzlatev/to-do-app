@@ -11,5 +11,13 @@ main {
 form, article {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   gap:2em
+
+}
+
+form > div {
+  display: flex;
+  flex-direction: column;
 }
