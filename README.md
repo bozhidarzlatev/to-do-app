@@ -5,3 +5,4 @@ Hello this is basic React 19 To-do List app.
 # Development
     = Frontend
         - Set React
+        - Set basic HTML & CSS 
