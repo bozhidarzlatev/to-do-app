@@ -11,3 +11,4 @@ Hello this is basic React 19 To-do List app.
         - Clear task and localStorage added
         - Added delete task functionality
         - Minor CSS fixes
+        - Done functionality added

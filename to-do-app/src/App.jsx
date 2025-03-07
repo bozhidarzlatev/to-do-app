@@ -37,6 +37,15 @@ function App() {
 
     }
 
+    const onDoneButton = (id) => {
+
+        setToDo(prev => 
+            prev.map(task =>
+                task.id === id ? {...task , status: "Done"} : task
+            )
+        )
+    }
+
 
 
     return (
@@ -117,7 +126,9 @@ function App() {
                                     <p>{task.status}</p>
                                 </div>
                                 <div>
-                                    <button>Done</button>
+                                    {task.status !== "Done"? 
+                                    <button onClick={() => onDoneButton(task.id)}>Done</button> : ""
+                                }
                                     <button>Edit</button>
                                     <button onClick={() => onDeleteButton(task.id)}>Delete</button>
                                 </div>
