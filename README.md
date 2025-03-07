@@ -6,3 +6,5 @@ Hello this is basic React 19 To-do List app.
     = Frontend
         - Set React
         - Set basic HTML & CSS 
+        - Implemented basick add functionality
+        - Added localStorage for storing the data

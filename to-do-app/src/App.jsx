@@ -1,8 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-    const [toDo, setToDo] = useState({})
+    const [toDo, setToDo] = useState(() => {
+        const localStorageData = localStorage.getItem('toDoAppTasks');
+        return localStorageData ? JSON.parse(localStorageData) : [];
+    });
+
+    useEffect(() => {
+        localStorage.setItem('toDoAppTasks', JSON.stringify(toDo));
+    }, [toDo]);
+
+
+
+    const onAddTask = (formData) => {
+        const taskData = Object.fromEntries(formData)
+        setToDo(current => [...current,taskData] );
+        console.log(JSON.stringify(toDo));
+        console.log(toDo);
+        
+    }
+
+    
 
     return (
         <>
@@ -13,7 +32,7 @@ function App() {
 
             <main>
                 <section>
-                    <form action="">
+                    <form action={onAddTask}>
                         <div>
                             <label htmlFor="task">Task</label>
                             <input type="text" id="task" name="task" />
@@ -21,7 +40,7 @@ function App() {
 
                         <div>
                             <label htmlFor="priority">Priority</label>
-                            <select name="priority" id="priority">
+                            <select name="priority" id="priority" >
                                 <option value="normal" disabled selected>-Please select priority-</option>
                                 <option value="normal">Normal</option>
                                 <option value="medium">Medium</option>
@@ -31,8 +50,8 @@ function App() {
                         <div>
                             <div>
 
-                                <label>Due Date:</label>
-                                <input type="date" />
+                                <label htmlFor="date">Due Date:</label>
+                                <input type="date" it="date" name="date"/>
                             </div>
                             <button>Submit</button>
                         </div>
@@ -43,6 +62,7 @@ function App() {
                 </section>
 
                 <section>
+
                     <article>
 
                     <div>
@@ -58,16 +78,18 @@ function App() {
                         <p>Controls:</p>
                     </div>
                     </article>
-                    <article>
+                    {toDo.map(task => 
 
+<>
+                    <article>
                     <div>
-                        <p>Go to fitnes</p>
+                        <p>{task.task}</p>
                     </div>
                     <div>
-                        <p>Medium</p>
+                        <p>{task.priority}</p>
                     </div>
                     <div>
-                        <p>02-03-2025</p>
+                        <p>{task.date}</p>
                     </div>
                     <div>
                         <button>Done</button>
@@ -75,6 +97,8 @@ function App() {
                         <button>Delete</button>
                     </div>
                     </article>
+                           
+                           </>)}
                 </section>
 
             </main>
