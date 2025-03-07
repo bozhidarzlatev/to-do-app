@@ -9,4 +9,4 @@ Hello this is basic React 19 To-do List app.
         - Implemented basick add functionality
         - Added localStorage for storing the data
         - Clear task and localStorage added
-        
+        - Added delete task functionality

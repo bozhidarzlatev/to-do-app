@@ -18,20 +18,23 @@ function App() {
         const taskData = Object.fromEntries(formData);
         const id = Date.now()
         const dataToPush = {id, ...taskData, status: "pending"}
-        console.log(dataToPush);
         
         setToDo(current => [...current, dataToPush]);
     }
 
-    const onDeleteAllTasks = () => {
+    const onClearAllTasks = () => {
         setToDo([]);
         localStorage.removeItem('toDoAppTasks'); 
     }
 
     const onAddTaskButton = () => {
         setAddTask(prev => !prev)
-        console.log(addTask);
         
+    }
+
+    const onDeleteButton  = (id) => {
+        setToDo(prev => prev.filter(task => task.id !== id))
+
     }
 
 
@@ -47,7 +50,7 @@ function App() {
                 <div>
 
                 <button onClick={onAddTaskButton}>{!addTask ? "Add Task" : "Hide"} </button>
-                <button onClick={onDeleteAllTasks}>Clear All Tasks</button>
+                <button onClick={onClearAllTasks}>Clear All Tasks</button>
                 </div>
                 {addTask ? 
                 <section>
@@ -93,6 +96,9 @@ function App() {
                             <p>Due date:</p>
                         </div>
                         <div>
+                            <p>Status:</p>
+                        </div>
+                        <div>
                             <p>Controls:</p>
                         </div>
                     </article>
@@ -108,9 +114,12 @@ function App() {
                                     <p>{task.date}</p>
                                 </div>
                                 <div>
+                                    <p>{task.status}</p>
+                                </div>
+                                <div>
                                     <button>Done</button>
                                     <button>Edit</button>
-                                    <button>Delete</button>
+                                    <button onClick={() => onDeleteButton(task.id)}>Delete</button>
                                 </div>
                             </article>
                         )}
