@@ -1,2 +1,7 @@
-# to-do-app
-basic to-do app
+# To-Do App
+
+Hello this is basic React 19 To-do List app.
+
+# Development
+    = Frontend
+        - Set React
