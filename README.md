@@ -13,3 +13,4 @@ live at: https://justtodoit.vercel.app
         - Added delete task functionality
         - Minor CSS fixes
         - Done functionality added
+        - Tailwind CSS added
