@@ -159,7 +159,7 @@ function App() {
       
             {/* Task List */}
             <section className="bg-white p-4 rounded-lg shadow-md">
-              <div className="grid grid-cols-5 font-bold border-b pb-2 text-sm sm:text-base">
+              <div className="grid grid-cols-5 font-bold border-b pb-2 text-sm sm:text-base hidden sm:grid">
                 <p>Task</p>
                 <p>Priority</p>
                 <p>Due Date</p>
@@ -169,7 +169,10 @@ function App() {
       
               {toDo.length > 0 ? (
                 toDo.map((task) => (
-                  <div key={task.id} className="grid grid-cols-5 py-2 border-b text-sm sm:text-base">
+                  <div
+                    key={task.id}
+                    className="grid grid-cols-1 sm:grid-cols-5 py-2 border-b text-sm sm:text-base"
+                  >
                     <p>{task.task}</p>
                     <p
                       className={`font-bold ${
@@ -190,18 +193,19 @@ function App() {
                     >
                       {task.status}
                     </p>
-                    <div className="flex space-x-2 justify-center">
+      
+                    <div className="flex flex-col sm:flex-row sm:space-x-2 justify-center mt-2 sm:mt-0">
                       {task.status !== "Done" && (
                         <button
                           onClick={() => onDoneButton(task.id)}
-                          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-xs sm:text-sm"
+                          className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-xs sm:text-sm mb-2 sm:mb-0"
                         >
                           Done
                         </button>
                       )}
                       <button
                         onClick={() => onEditButton(task.id)} // Edit button with onclick functionality
-                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xs sm:text-sm"
+                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xs sm:text-sm mb-2 sm:mb-0"
                       >
                         Edit
                       </button>
@@ -228,11 +232,32 @@ function App() {
           />
       
           {/* Footer */}
-          <footer className="text-center py-4 text-gray-600">
-            To-Do App Created by Bozhidar Zlatev 2025
-          </footer>
+          <footer className="fixed bottom-0 w-full bg-gray-200 text-center py-4 text-gray-600">
+  <div className="flex justify-center space-x-4">
+    <a
+      href="https://github.com/bozhidarzlatev"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-600 hover:text-black"
+    >
+      <i className="fab fa-github text-xl"></i>
+    </a>
+    <a
+      href="https://www.linkedin.com/in/bozhidarzlatev"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-gray-600 hover:text-blue-600"
+    >
+      <i className="fab fa-linkedin text-xl"></i>
+    </a>
+  </div>
+  <p className="mt-2">
+    © 2025 To-Do App. Designed and developed by Bozhidar Zlatev.
+  </p>
+</footer>
         </div>
       );
+      
       
       
 }

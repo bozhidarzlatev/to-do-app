@@ -14,3 +14,4 @@ live at: https://justtodoit.vercel.app
         - Minor CSS fixes
         - Done functionality added
         - Tailwind CSS added
+        - Footer Component Added
