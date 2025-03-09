@@ -16,3 +16,4 @@ live at: https://justtodoit.vercel.app
         - Tailwind CSS added
         - Footer Component Added
         - Header Component Added
+        - Added Edit Task functionality

@@ -2,82 +2,9 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Footer from './components/Footer';
 import Header from './components/Header';
-
-const AddTaskModal = ({ isOpen, onClose, onAddTask }) => {
-    if (!isOpen) return null;
-
-    return (
-        <div
-            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md"
-            onClick={onClose} // Close when clicking outside
-        >
-            {/* Modal Box */}
-            <div
-                className="bg-white p-6 rounded-lg shadow-lg w-96 border border-white/40"
-                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
-            >
-                <h2 className="text-xl font-bold mb-4 text-gray-900 text-center">Add New Task</h2>
-
-                <form action={onAddTask}>
-                    <div className="mb-4">
-                        <label htmlFor="task" className="block font-medium text-gray-900">Task</label>
-                        <input
-                            type="text"
-                            id="task"
-                            name="task"
-                            className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            placeholder="Enter task"
-                            required
-                        />
-                    </div>
-
-                    <div className="mb-4">
-                        <label htmlFor="priority" className="block font-medium text-gray-900">Priority</label>
-                        <select
-                            name="priority"
-                            id="priority"
-                            className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                        >
-                            <option value="" disabled selected>
-                                -Please select priority-
-                            </option>
-                            <option value="normal">Normal</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
-                    </div>
-
-                    <div className="mb-4">
-                        <label htmlFor="date" className="block font-medium text-gray-900">Due Date</label>
-                        <input
-                            type="date"
-                            id="date"
-                            name="date"
-                            className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            required
-                        />
-                    </div>
-
-                    <div className="flex justify-between">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        >
-                            Submit
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
-};
+import AddTaskModal from './components/AddTaskModal';
+import ButtonsControls from './components/ButtonsControls';
+import EditTaskModal from './components/EditTaskModal';
 
 
 
@@ -86,10 +13,15 @@ function App() {
         const localStorageData = localStorage.getItem('toDoAppTasks');
         return localStorageData ? JSON.parse(localStorageData) : [];
     });
+
     const [addTask, setAddTask] = useState(false)
+    const [editMode, setEditMode] = useState(false)
+    const [editData, setEditData] = useState('')
 
     useEffect(() => {
         localStorage.setItem('toDoAppTasks', JSON.stringify(toDo));
+        console.log(toDo);
+        
     }, [toDo]);
 
 
@@ -103,19 +35,21 @@ function App() {
         onCloseTaskButton();
     }
 
+
     const onClearAllTasks = () => {
         setToDo([]);
         localStorage.removeItem('toDoAppTasks');
     }
 
     const onAddTaskButton = () => {
-        setAddTask(prev => !prev)
+        setAddTask(true)
 
     }
 
 
     const onCloseTaskButton = () => {
         setAddTask(false)
+        setEditMode(false)
 
     }
 
@@ -125,7 +59,6 @@ function App() {
     }
 
     const onDoneButton = (id) => {
-
         setToDo(prev =>
             prev.map(task =>
                 task.id === id ? { ...task, status: "Done" } : task
@@ -133,6 +66,27 @@ function App() {
         )
     }
 
+    const onEditButton  = (id) => {
+        const task = toDo.filter(item => item.id === id)[0];
+        setEditData(prev => prev=task)
+        setEditMode(true)
+        setAddTask(true)
+        
+    }
+
+    const onEditTask = (formData) => {
+        const editedTaskData = Object.fromEntries(formData);
+        const status = editedTaskData.status.charAt(0).toUpperCase() + editedTaskData.status.slice(1)
+        
+        setToDo(prev => 
+        prev.map(task =>
+            Number(task.id) === Number(editedTaskData.id) ? { ...editedTaskData, status: status} : task
+        )
+        )
+        
+        onCloseTaskButton();
+        setEditMode(false)
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 text-gray-900">
@@ -140,20 +94,10 @@ function App() {
 
 
             <main className="max-w-5xl mx-auto mt-6 p-4">
-                <div className="flex justify-between mb-6">
-                    <button
-                        onClick={() => setAddTask(true)}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    >
-                        Add Task
-                    </button>
-                    <button
-                        onClick={() => setToDo([])}
-                        className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
-                    >
-                        Clear All Tasks
-                    </button>
-                </div>
+                <ButtonsControls
+                    onAddTaskButton={onAddTaskButton}
+                    onClearAllTasks={onClearAllTasks}
+                />
 
                 <section className="bg-white p-4 rounded-lg shadow-md">
                     <div className="grid grid-cols-5 font-bold border-b pb-2 text-sm sm:text-base hidden sm:grid">
@@ -168,15 +112,15 @@ function App() {
                         toDo.map((task) => (
                             <div
                                 key={task.id}
-                                className="grid grid-cols-1 sm:grid-cols-5 py-2 border-b text-sm sm:text-base"
+                                className={`grid grid-cols-1 sm:grid-cols-5 py-2 border-b text-sm sm:text-base ${task.status === "Done" ? "bg-green-100" : ""}`}
                             >
                                 <p>{task.task}</p>
                                 <p
                                     className={`font-bold ${task.priority === "high"
-                                            ? "text-red-500"
-                                            : task.priority === "medium"
-                                                ? "text-yellow-500"
-                                                : "text-green-500"
+                                        ? "text-red-500"
+                                        : task.priority === "medium"
+                                            ? "text-yellow-500"
+                                            : "text-green-500"
                                         }`}
                                 >
                                     {task.priority}
@@ -189,21 +133,23 @@ function App() {
                                     {task.status}
                                 </p>
 
-                                <div className="flex flex-col sm:flex-row sm:space-x-2 justify-center mt-2 sm:mt-0">
+                                <div className="flex flex-col sm:flex-row sm:space-x-2 justify-end mt-2 sm:mt-0">
                                     {task.status !== "Done" && (
-                                        <button
-                                            onClick={() => onDoneButton(task.id)}
-                                            className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-xs sm:text-sm mb-2 sm:mb-0"
-                                        >
-                                            Done
-                                        </button>
+                                        <>
+                                            <button
+                                                onClick={() => onDoneButton(task.id)}
+                                                className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-xs sm:text-sm mb-2 sm:mb-0"
+                                                >
+                                                Done
+                                            </button>
+                                            <button
+                                                onClick={() => onEditButton(task.id)}
+                                                className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xs sm:text-sm mb-2 sm:mb-0"
+                                            >
+                                                Edit
+                                            </button>
+                                        </>
                                     )}
-                                    <button
-                                        className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xs sm:text-sm mb-2 sm:mb-0"
-                                        dis
-                                    >
-                                        Edit
-                                    </button>
                                     <button
                                         onClick={() => onDeleteButton(task.id)}
                                         className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 text-xs sm:text-sm"
@@ -217,12 +163,24 @@ function App() {
                         <p className="text-center text-gray-500 mt-4">No tasks available.</p>
                     )}
                 </section>
+
+
             </main>
 
+                    
             <AddTaskModal
+                title="Add New"
                 isOpen={addTask}
-                onClose={() => setAddTask(false)}
+                onClose={onCloseTaskButton}
                 onAddTask={onAddTask}
+            />
+
+            <EditTaskModal
+            title="Edit"
+            editData={editData}
+            isEdit={editMode}
+            onClose={onCloseTaskButton}
+            onEditTask={onEditTask}
             />
 
             <Footer />
