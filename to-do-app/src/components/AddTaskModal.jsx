@@ -4,7 +4,7 @@ export default function AddTaskModal({ title, isOpen, onClose, onAddTask }) {
     return (
 
         <div
-        className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md"
+        className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-10"
         onClick={onClose}
         >
             <div
