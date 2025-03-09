@@ -5,7 +5,7 @@ export default function Header() {
                 <img
                     src="/bob.png"
                     alt="Logo"
-                    className="w-8 h-auto  rounded-full filter brightness-0 invert"
+                    className="w-8 h-auto  rounded-full filter brightness-0 "
                 />
             </div>
             <span className="ml-10">To-Do App</span>
