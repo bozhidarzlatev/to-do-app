@@ -1,11 +1,16 @@
 const priority = [{l: 'normal' , h: 'Normal'}, {l: 'medium', h: 'Medium'}, {l:'high', h: 'High'}]
-const status = [{l: 'pending' , h: 'Pending'}, {l: 'onhold', h: 'On Hold'},{l:'working', h: 'Working On'}, {l:'postpone', h: 'Postpone'}, {l:'done', h: 'Done'}]
+const status = [
+    {l: 'pending' , h: 'Pending'}, 
+    {l: 'onhold', h: 'On Hold'},
+    {l:'working', h: 'Working On'}, 
+    {l:'postpone', h: 'Postpone'}, 
+    {l:'done', h: 'Done'},
+    { l: 'overdue', h: 'Overdue' }]
 
 export default function EditTaskModal({ title, isEdit, editData, onClose, onEditTask }) {
     if (!isEdit) return null;
 
     return (
-
         <div
         className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-10"
         onClick={onClose}
