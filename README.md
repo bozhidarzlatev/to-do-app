@@ -17,3 +17,4 @@ live at: https://justtodoit.vercel.app
         - Footer Component Added
         - Header Component Added
         - Added Edit Task functionality
+        - Bug fixes

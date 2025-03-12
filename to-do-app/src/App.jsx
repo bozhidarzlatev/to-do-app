@@ -6,6 +6,20 @@ import AddTaskModal from './components/AddTaskModal';
 import ButtonsControls from './components/ButtonsControls';
 import EditTaskModal from './components/EditTaskModal';
 
+const status = [
+    { l: 'pending', h: 'Pending' },
+    { l: 'onhold', h: 'On Hold' }, 
+    { l: 'working', h: 'Working On' },
+    { l: 'postpone', h: 'Postpone' },
+    { l: 'done', h: 'Done' }
+]
+
+const priority = [
+    {l: 'normal' , h: 'Normal'}, 
+    {l: 'medium', h: 'Medium'}, 
+    {l:'high', h: 'High'}
+
+]
 
 
 function App() {
@@ -20,8 +34,6 @@ function App() {
 
     useEffect(() => {
         localStorage.setItem('toDoAppTasks', JSON.stringify(toDo));
-        console.log(toDo);
-        
     }, [toDo]);
 
 
@@ -66,24 +78,33 @@ function App() {
         )
     }
 
-    const onEditButton  = (id) => {
+    const onEditButton = (id) => {
         const task = toDo.filter(item => item.id === id)[0];
-        setEditData(prev => prev=task)
+
+        setEditData(prev => prev = task)
         setEditMode(true)
         setAddTask(true)
-        
+
     }
+
+    const getStatusAndPrioriy = (statusData, priorityData) => {
+        const updStatus = status.find(item => item.l === statusData)?.h || "";
+        const updPriority = priority.find(item => item.l === priorityData)?.h || "";
+        return {updStatus, updPriority}
+    }
+
+
 
     const onEditTask = (formData) => {
         const editedTaskData = Object.fromEntries(formData);
-        const status = editedTaskData.status.charAt(0).toUpperCase() + editedTaskData.status.slice(1)
+        const updatedStatus  = getStatusAndPrioriy(editedTaskData.status, editedTaskData.priority)
         
-        setToDo(prev => 
-        prev.map(task =>
-            Number(task.id) === Number(editedTaskData.id) ? { ...editedTaskData, status: status} : task
+        setToDo(prev =>
+            prev.map(task =>
+                Number(task.id) === Number(editedTaskData.id) ? { ...editedTaskData,priority: updatedStatus.updPriority, status: updatedStatus.updStatus  } : task
+            )
         )
-        )
-        
+
         onCloseTaskButton();
         setEditMode(false)
     }
@@ -139,7 +160,7 @@ function App() {
                                             <button
                                                 onClick={() => onDoneButton(task.id)}
                                                 className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 text-xs sm:text-sm mb-2 sm:mb-0"
-                                                >
+                                            >
                                                 Done
                                             </button>
                                             <button
@@ -167,7 +188,7 @@ function App() {
 
             </main>
 
-                    
+
             <AddTaskModal
                 title="Add New"
                 isOpen={addTask}
@@ -176,11 +197,11 @@ function App() {
             />
 
             <EditTaskModal
-            title="Edit"
-            editData={editData}
-            isEdit={editMode}
-            onClose={onCloseTaskButton}
-            onEditTask={onEditTask}
+                title="Edit"
+                editData={editData}
+                isEdit={editMode}
+                onClose={onCloseTaskButton}
+                onEditTask={onEditTask}
             />
 
             <Footer />

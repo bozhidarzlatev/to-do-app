@@ -1,9 +1,9 @@
 const priority = [{l: 'normal' , h: 'Normal'}, {l: 'medium', h: 'Medium'}, {l:'high', h: 'High'}]
-const status = [{l: 'pending' , h: 'Pending'}, {l: 'onhold', h: 'On Hold'}, , {l:'working', h: 'Working On'}, {l:'postpone', h: 'Postpone'}, {l:'done', h: 'Done'}]
+const status = [{l: 'pending' , h: 'Pending'}, {l: 'onhold', h: 'On Hold'},{l:'working', h: 'Working On'}, {l:'postpone', h: 'Postpone'}, {l:'done', h: 'Done'}]
 
 export default function EditTaskModal({ title, isEdit, editData, onClose, onEditTask }) {
     if (!isEdit) return null;
-    
+
     return (
 
         <div
@@ -48,7 +48,7 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             id="priority"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
                             >
-                            {priority.map(key => key.l === editData?.priority 
+                            {priority.map(key => key.h === editData?.priority 
                             ? <option value={key.l} selected>{key.h}</option>
                             : <option value={key.l}>{key.h}</option>
 
@@ -77,7 +77,7 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
                             >
  
-                            {status.map(key => key.l === editData?.priority 
+                            {status.map(key => key.h === editData?.status 
                             ? <option value={key.l} selected>{key.h}</option>
                             : <option value={key.l}>{key.h}</option>
 
