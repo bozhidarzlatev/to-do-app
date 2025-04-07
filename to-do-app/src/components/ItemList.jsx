@@ -7,10 +7,12 @@ export default function ItemList({toDo, onDoneButton, onEditButton, onDeleteButt
                     task.status === "Done"
                         ? "bg-green-100"
                         : task.status === "Overdue"
-                        ? "bg-red-200"
-                        : task.status === "For Today"
-                        ? "bg-yellow-200"
-                        : ""
+                            ? "bg-red-200"
+                            : task.status === "For Today"
+                                ? "bg-yellow-200"
+                                : task.status === "Refused"
+                                    ? "bg-gray-100"
+                                    : ""
                 }`}
             >
                 <p>{task.task}</p>
@@ -31,15 +33,17 @@ export default function ItemList({toDo, onDoneButton, onEditButton, onDeleteButt
                         task.status === "Done"
                             ? "text-green-500 font-bold"
                             : task.status === "Overdue"
-                            ? "text-red-500 font-bold"
-                            : "text-gray-600"
+                                ? "text-red-500 font-bold"
+                                : task.status === "Refused"
+                                ?   "text-gray-400 font-bold"
+                                : "text-gray-600"
                     }`}
                 >
                     {task.status}
                 </p>
 
                 <div className="flex flex-col sm:flex-row sm:space-x-2 justify-end mt-2 sm:mt-0">
-                    {task.status !== "Done" && (
+                    {task.status !== "Done"  && task.status !== "Refused" && (
                         <>
                             <button
                                 onClick={() => onDoneButton(task.id)}
