@@ -1,13 +1,36 @@
+import { useEffect, useState } from "react";
 import { priority, status } from "../util/structure";
 
-export default function EditTaskModal({ title, isEdit, editData, onClose, onEditTask }) {
+export default function EditTaskModal({ title, isEdit, editData, onClose, onEditTask, date }) {
     if (!isEdit) return null;
 
-    
+    const [selectedDate, setSelectedDate] = useState(editData?.date || '');
+    const [filteredStatus, setFilteredStatus] = useState(status);
+
+    useEffect(() => {
+        if (!selectedDate) return;
+        const today = date.toISOString().split("T")[0]
+
+
+        let filtered;
+ 
+        if (selectedDate < today) {
+            filtered = status.filter(s => [`Done`, `Overdue`, `Refused`].includes(s.c))
+        } else if (selectedDate === today) {
+            filtered = status.filter(s => [`For Today`, `Pending`, `On Hold`, 'Working On', 'Postpone', 'Done', `Refused`].includes(s.c))
+        } else {
+            filtered = status.filter(s => [`Pending`, `On Hold`, 'Working On', 'Postpone', 'Done', `Refused`].includes(s.c))
+        }  
+        
+        
+        setFilteredStatus(filtered)
+
+    }, [selectedDate])
+
     return (
         <div
-        className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-10"
-        onClick={onClose}
+            className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-10"
+            onClick={onClose}
         >
             <div
                 className="bg-white p-6 rounded-lg shadow-lg w-96 border border-white/40"
@@ -23,9 +46,9 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             id="id"
                             name="id"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            defaultValue={editData?.id || ''} 
+                            defaultValue={editData?.id || ''}
                             readOnly
-                            />
+                        />
                     </div>
                     <div className="mb-4">
                         <label htmlFor="task" className="block font-medium text-gray-900">Task</label>
@@ -35,9 +58,9 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             name="task"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
                             placeholder="Enter task"
-                            defaultValue={editData?.task || ''} 
+                            defaultValue={editData?.task || ''}
                             required
-                            />
+                        />
                     </div>
 
                     <div className="mb-4">
@@ -46,10 +69,10 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             name="priority"
                             id="priority"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            >
-                            {priority.map(key => key.c === editData?.priority 
-                            ? <option value={key.l} selected>{key.c}</option>
-                            : <option value={key.l}>{key.c}</option>
+                        >
+                            {priority.map(key => key.c === editData?.priority
+                                ? <option value={key.l} selected>{key.c}</option>
+                                : <option value={key.l}>{key.c}</option>
 
                             )}
                         </select>
@@ -63,7 +86,8 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             id="date"
                             name="date"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            defaultValue={editData?.date || ''} 
+                            defaultValue={editData?.date || ''}
+                            onChange={(e) => setSelectedDate(e.target.value)}
                             required
                         />
                     </div>
@@ -74,13 +98,17 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             name="status"
                             id="status"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
-                            >
- 
-                            {status.map(key => key.c === editData?.status 
-                            ? <option value={key.l} selected>{key.c}</option>
-                            : <option value={key.l}>{key.c}</option>
+                        >
 
-                            )}
+                            {filteredStatus.map((key) => (
+                                <option
+                                    key={key.l}
+                                    value={key.l}
+                                    selected={key.c === editData?.status}
+                                >
+                                    {key.c}
+                                </option>
+                            ))}
                         </select>
                     </div>
 

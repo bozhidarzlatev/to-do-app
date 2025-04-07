@@ -20,7 +20,7 @@ export default function Footer() {
                 </a>
             </div>
             <p className="mt-2">
-                © 2025 To-Do App. Designed and developed by Bozhidar Zlatev.
+                © 2025 To-Do App v1.2.0. Designed and developed by Bozhidar Zlatev.
             </p>
         </footer>
     );

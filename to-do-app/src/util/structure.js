@@ -5,7 +5,8 @@ export const status = [
     { l: 'postpone', c: 'Postpone' },
     { l: 'done', c: 'Done' },
     { l: 'overdue', c: 'Overdue' },
-    { l: 'today', c: 'For Today' }
+    { l: 'today', c: 'For Today' },
+    { l: 'refused', c: 'Refused' }
 ]
 
 export const priority = [

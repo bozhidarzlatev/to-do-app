@@ -22,7 +22,7 @@ function App() {
     const [date, setDate] = useState()
 
     useEffect(() => {
-        setDate(new Date()); // Update current date
+        setDate(new Date());
     }, []);
 
     useEffect(() => {
@@ -163,7 +163,7 @@ function App() {
     
                     {toDo.length > 0 
                     ? 
-                        <ItemList toDo={toDo} onDoneButton={onDoneButton} onEditButton={onEditButton} onDeleteButton={onDeleteButton}/>
+                        <ItemList toDo={toDo} onDoneButton={onDoneButton} onEditButton={onEditButton} onDeleteButton={onDeleteButton} />
                     : <p className="text-center text-gray-500 mt-4">No tasks available.</p>
                     }
                 </section>
@@ -182,6 +182,7 @@ function App() {
                 isEdit={editMode}
                 onClose={onCloseTaskButton}
                 onEditTask={onEditTask}
+                date={date}
             />
     
             <Footer /> 
