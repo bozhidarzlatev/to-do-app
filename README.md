@@ -19,3 +19,8 @@ live at: https://justtodoit.vercel.app
         - Added Edit Task functionality
         - Status and priority bug fixes
         - Added overdue status and functionality
+    =v1.2.0 
+        - Dynamic on edit status select, based on the choosen date
+        - CSS fixes
+        - Component fixes
+        - Footer fixes
