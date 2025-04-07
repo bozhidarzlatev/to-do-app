@@ -7,18 +7,19 @@ import ButtonsControls from './components/ButtonsControls';
 import EditTaskModal from './components/EditTaskModal';
 
 const status = [
-    { l: 'pending', h: 'Pending' },
-    { l: 'onhold', h: 'On Hold' }, 
-    { l: 'working', h: 'Working On' },
-    { l: 'postpone', h: 'Postpone' },
-    { l: 'done', h: 'Done' },
-    { l: 'overdue', h: 'Overdue' }
+    { l: 'pending', c: 'Pending' },
+    { l: 'onhold', c: 'On Hold' }, 
+    { l: 'working', c: 'Working On' },
+    { l: 'postpone', c: 'Postpone' },
+    { l: 'done', c: 'Done' },
+    { l: 'overdue', c: 'Overdue' },
+    { l: 'today', c: 'For Today' }
 ]
 
 const priority = [
-    {l: 'normal' , h: 'Normal'}, 
-    {l: 'medium', h: 'Medium'}, 
-    {l:'high', h: 'High'}
+    {l: 'normal' , c: 'Normal'}, 
+    {l: 'medium', c: 'Medium'}, 
+    {l:'high', c: 'High'}
 
 ]
 
@@ -46,25 +47,38 @@ function App() {
     useEffect(() => {
         setToDo(prev => 
             prev.map(item => 
-                chechDate(item.date) ? { ...item, status: "Overdue" } : item
+                checkOverdue(item.date) 
+                ? { ...item, status: "Overdue" } 
+                : checkToday(item.date)
+                    ? { ...item, status: "For Today" }
+                    : item
             )
         );
     }, [date]);
 
 
-    const chechDate = (dateToVal) => {
-        return new Date(dateToVal) < date
+    const checkOverdue = (dateToVal) => {
+        if (!date) return false;
+        const today = date.toISOString().split("T")[0]; 
+        const dueDate = dateToVal;
+
+        return dueDate < today;
+    }
+
+    const checkToday = (dateToVal) => {
+        if (!date) return false;
+        const today = date.toISOString().split("T")[0]; 
+        const dueDate = dateToVal;
+        return dueDate === today;
     }
 
     const onAddTask = (formData) => {
         
         const taskData = Object.fromEntries(formData);
         const stsAndPriority = getStatusAndPrioriy(taskData.priority)
-        
+
         const id = Date.now()
-        const isOverdue = chechDate(taskData.date) 
-        console.log(new Date(taskData.date) < date);
-        console.log(isOverdue);
+        const isOverdue = checkOverdue(taskData.date) 
         
 
         const dataToPush = { 
@@ -119,8 +133,8 @@ function App() {
 
     const getStatusAndPrioriy = (priorityData, statusData) => {
         
-        const updPriority = priority.find(item => item.l === priorityData)?.h || "";
-        const updStatus = status.find(item => item.l === statusData)?.h || "Pending"
+        const updPriority = priority.find(item => item.l === priorityData)?.c || "";
+        const updStatus = status.find(item => item.l === statusData)?.c || "Pending"
         return {updStatus, updPriority}
     }
 
@@ -141,18 +155,16 @@ function App() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-100 text-gray-900">
+        <div className="flex flex-col min-h-screen bg-gray-100 text-gray-900">
             <Header />
-
-
-            <main className="max-w-5xl mx-auto mt-6 p-4">
+    
+            <main className="flex-grow max-w-5xl mx-auto mt-6 p-4 w-full">
                 <ButtonsControls
                     onAddTaskButton={onAddTaskButton}
                     onClearAllTasks={onClearAllTasks}
                 />
-
+    
                 <section className="bg-white p-4 rounded-lg shadow-md">
-
                     <div className="grid grid-cols-5 font-bold border-b pb-2 px-2 text-sm sm:text-base hidden sm:grid">
                         <p>Task</p>
                         <p>Priority</p>
@@ -160,31 +172,47 @@ function App() {
                         <p>Status</p>
                         <p>Controls</p>
                     </div>
-                    {toDo.length > 0 ? (
+    
+                    {toDo.length > 0 
+                    ? 
                         toDo.map((task) => (
                             <div
                                 key={task.id}
-                                className={`grid grid-cols-1 sm:grid-cols-5 py-2 px-2 border-b text-sm sm:text-base ${task.status === "Done" ? "bg-green-100" : task.status === "Overdue" ? "bg-red-100" :""}`}
+                                className={`grid grid-cols-1 sm:grid-cols-5 py-2 px-2 border-b text-sm sm:text-base ${
+                                    task.status === "Done"
+                                        ? "bg-green-100"
+                                        : task.status === "Overdue"
+                                        ? "bg-red-200"
+                                        : task.status === "For Today"
+                                        ? "bg-yellow-200"
+                                        : ""
+                                }`}
                             >
                                 <p>{task.task}</p>
                                 <p
-                                    className={`font-bold ${task.priority === "High"
-                                        ? "text-red-500"
-                                        : task.priority === "Medium"
+                                    className={`font-bold ${
+                                        task.priority === "High"
+                                            ? "text-red-500"
+                                            : task.priority === "Medium"
                                             ? "text-yellow-500"
                                             : "text-green-500"
-                                        }`}
+                                    }`}
                                 >
                                     {task.priority}
                                 </p>
                                 <p>{task.date}</p>
                                 <p
-                                    className={`${task.status === "Done" ? "text-green-500 font-bold" : task.status === "Overdue" ? "text-red-500 font-bold" :"text-gray-600"
-                                        }`}
+                                    className={`${
+                                        task.status === "Done"
+                                            ? "text-green-500 font-bold"
+                                            : task.status === "Overdue"
+                                            ? "text-red-500 font-bold"
+                                            : "text-gray-600"
+                                    }`}
                                 >
                                     {task.status}
                                 </p>
-
+    
                                 <div className="flex flex-col sm:flex-row sm:space-x-2 justify-end mt-2 sm:mt-0">
                                     {task.status !== "Done" && (
                                         <>
@@ -211,22 +239,18 @@ function App() {
                                 </div>
                             </div>
                         ))
-                    ) : (
-                        <p className="text-center text-gray-500 mt-4">No tasks available.</p>
-                    )}
+                    : <p className="text-center text-gray-500 mt-4">No tasks available.</p>
+                    }
                 </section>
-
-
             </main>
-
-
+    
             <AddTaskModal
                 title="Add New"
                 isOpen={addTask}
                 onClose={onCloseTaskButton}
                 onAddTask={onAddTask}
             />
-
+    
             <EditTaskModal
                 title="Edit"
                 editData={editData}
@@ -234,10 +258,11 @@ function App() {
                 onClose={onCloseTaskButton}
                 onEditTask={onEditTask}
             />
-
-            <Footer />
+    
+            <Footer /> 
         </div>
     );
+    
 
 
 
