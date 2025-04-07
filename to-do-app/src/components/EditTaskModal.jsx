@@ -1,15 +1,9 @@
-const priority = [{l: 'normal' , h: 'Normal'}, {l: 'medium', h: 'Medium'}, {l:'high', h: 'High'}]
-const status = [
-    {l: 'pending' , h: 'Pending'}, 
-    {l: 'onhold', h: 'On Hold'},
-    {l:'working', h: 'Working On'}, 
-    {l:'postpone', h: 'Postpone'}, 
-    {l:'done', h: 'Done'},
-    { l: 'overdue', h: 'Overdue' }]
+import { priority, status } from "../util/structure";
 
 export default function EditTaskModal({ title, isEdit, editData, onClose, onEditTask }) {
     if (!isEdit) return null;
 
+    
     return (
         <div
         className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-md z-10"
@@ -53,9 +47,9 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                             id="priority"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
                             >
-                            {priority.map(key => key.h === editData?.priority 
-                            ? <option value={key.l} selected>{key.h}</option>
-                            : <option value={key.l}>{key.h}</option>
+                            {priority.map(key => key.c === editData?.priority 
+                            ? <option value={key.l} selected>{key.c}</option>
+                            : <option value={key.l}>{key.c}</option>
 
                             )}
                         </select>
@@ -75,16 +69,16 @@ export default function EditTaskModal({ title, isEdit, editData, onClose, onEdit
                     </div>
 
                     <div className="mb-4">
-                        <label htmlFor="priority" className="block font-medium text-gray-900">Status</label>
+                        <label htmlFor="status" className="block font-medium text-gray-900">Status</label>
                         <select
                             name="status"
                             id="status"
                             className="w-full p-2 border border-gray-300 bg-white rounded focus:ring focus:ring-blue-300"
                             >
  
-                            {status.map(key => key.h === editData?.status 
-                            ? <option value={key.l} selected>{key.h}</option>
-                            : <option value={key.l}>{key.h}</option>
+                            {status.map(key => key.c === editData?.status 
+                            ? <option value={key.l} selected>{key.c}</option>
+                            : <option value={key.l}>{key.c}</option>
 
                             )}
                         </select>
